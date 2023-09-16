@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Record Management</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="script.js"></script>
+</head>
+<body>
+    <style>
+        body{
+            display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+        
+    </style>
+    <div class="header-box">
+    <h1>CRUD Application</h1>
+</div>
+    <form id="create-form">
+        <h2>Create</h2>
+        <input type="text" id="name" placeholder="Name">
+        <input type="text" id="address" placeholder="Address">
+        <input type="text" id="age" placeholder="Age">
+        <button type="button" onclick="createRecord()">Create</button>
+    </form>
+
+    <form id="update-form">
+        <h2>Update</h2>
+        <input type="text" id="update-id" placeholder="ID">
+        <input type="text" id="update-name" placeholder="Enter Name">
+        <input type="text" id="update-address" placeholder="Enter Address">
+        <input type="text" id="update-age" placeholder="Enter Age">
+        <button type="button" onclick="updateRecord()">Update</button>
+    </form>
+
+    <form id="delete-form">
+        <h2>Delete</h2>
+        <input type="text" id="delete-id" placeholder="ID">
+        <button type="button" onclick="deleteRecord()">Delete</button>
+    </form>
+
+    <h2>Record List</h2>
+    <ul id="record-list"></ul>
+
+    <script>
+        let records = [];
+        let recordId = 1;
+
+        function createRecord() {
+            const name = document.getElementById("name").value;
+            const address = document.getElementById("address").value;
+            const age = document.getElementById("age").value;
+
+            const newRecord = { id: recordId++, name, address, age };
+            records.push(newRecord);
+
+            displayRecords();
+            clearForm("create-form");
+        }
+
+        function displayRecords() {
+            const recordList = document.getElementById("record-list");
+            recordList.innerHTML = "";
+
+            for (const record of records) {
+                const li = document.createElement("li");
+                li.innerHTML = `ID: ${record.id}, Name: ${record.name}, Address: ${record.address}, Age: ${record.age}`;
+                recordList.appendChild(li);
+            }
+        }
+
+        function clearForm(formId) {
+            const form = document.getElementById(formId);
+            form.reset();
+        }
+
+        function updateRecord() {
+            const id = document.getElementById("update-id").value;
+            const name = document.getElementById("update-name").value;
+            const address = document.getElementById("update-address").value;
+            const age = document.getElementById("update-age").value;
+
+            const recordToUpdate = records.find(record => record.id == id);
+
+            if (recordToUpdate) {
+                if (name) {
+                    recordToUpdate.name = name;
+                }
+                if (address) {
+                    recordToUpdate.address = address;
+                }
+                if (age) {
+                    recordToUpdate.age = age;
+                }
+                displayRecords();
+                clearForm("update-form");
+            } else {
+                alert("Record not found");
+            }
+        }
+
+        function deleteRecord() {
+            const id = document.getElementById("delete-id").value;
+            const index = records.findIndex(record => record.id == id);
+
+            if (index !== -1) {
+                records.splice(index, 1);
+                displayRecords();
+                clearForm("delete-form");
+            } else {
+                alert("Record not found");
+            }
+        }
+
+        displayRecords();
+    </script>
+</body>
+</html>
